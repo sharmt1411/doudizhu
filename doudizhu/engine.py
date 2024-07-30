@@ -19,6 +19,7 @@ CARD_IDX = {c: w for w, c in enumerate(CARDS)}
 CARDS_NO_JOKERS = CARDS[:-2]
 CARD_PAIR = [[c] * 2 for c in CARDS_NO_JOKERS]
 CARD_TRIO = [[c] * 3 for c in CARDS_NO_JOKERS]
+# print("3", CARD_TRIO)
 CARD_FOUR = [[c] * 4 for c in CARDS_NO_JOKERS]
 
 
@@ -29,7 +30,7 @@ def cards2str(cards):
 def str2cards(string):
     return string.split('-')
 
-
+# 不带花色计数4-4-5-5-4：2，5：2
 def str2cardmap(string):
     cards = str2cards(string)
     cardmap = {}
@@ -48,6 +49,7 @@ def sort_cards(cards):
     return sorted(cards, cmp=lambda x, y: CARD_IDX[x] - CARD_IDX[y])
 
 
+# 重复一张牌n次
 def order_repeat(cards, n):
     """按序重复每一个元素n次
     ([a,b,c], 3)
@@ -59,6 +61,7 @@ def order_repeat(cards, n):
     return tmp
 
 
+# result增加一组（排序后cards字符，权重）
 def put_sorted_cards(result, cards, weight):
     """cards is a list of card
     sort, 2str, append
@@ -85,11 +88,16 @@ def enum_solo_chain(length):
         return [(cards2str(CARDS[i:i + length]), i) for i in range(count)]
 
     return solo_chain_x
+# 这里返回的是函数，调用函数才会生成数据
+# list5 = enum_solo_chain(5)
+# for i in list5:
+#     print(i)
 
 
 def enum_pair():
     """枚举所有的对子"""
     return [(cards2str(pair), w) for w, pair in enumerate(CARD_PAIR)]
+# print(enum_pair())
 
 
 def enum_pair_chain(length):
@@ -381,10 +389,12 @@ class Doudizhu(object):
         todo: covert the key to binary format
     """
     DATA = {}
+    # 'Q-Q-Q-Q': [('bomb', 9)] 每种牌以及权重
     """
         {type:{weight:[cards,]},}
     """
     TYPE_CARDS = {}
+    # 'bomb': {0 : ['3-3-3-3'], 1 : ['4-4-4-4'],
     TOTAL = 0
     INIT_FLAG = False
 
@@ -416,6 +426,7 @@ class Doudizhu(object):
         logging.debug(Doudizhu.TOTAL)
 
     @staticmethod
+    # 一个牌涉及多种类型，如3-3-3-3-4-4-4-4，返回所有该种类型
     def print_multiple_types_cards():
         for cards, value in iter(Doudizhu.DATA.items()):
             if len(value) > 2 or \
@@ -457,6 +468,7 @@ class Doudizhu(object):
         return ValueError('Can not compare card type')
 
     @staticmethod
+    # x,y可能有不同牌型，只要有一种牌型大于y，就返回True和牌型
     def cards_greater(cards_x, cards_y):
         """check if x is greater than y
         x, y可能分别组成不同牌型
@@ -488,7 +500,7 @@ class Doudizhu(object):
 
     @staticmethod
     def list_greater_cards(cards_target, cards_candidate):
-        """ 对于目标牌组合cards_target
+        """ 对于目标牌组合cards_target,输入str
         从候选牌cards_candidate中找出所有可以压制它的牌型
 
         1. 对于cards_taget同牌型的不同权重组合来说，按其最大权重计算
@@ -545,3 +557,15 @@ class Doudizhu(object):
             if not cards_gt[card_type]:
                 cards_gt.pop(card_type)
         return cards_gt
+
+# doudizhu=Doudizhu()
+# doudizhu.init_doudizhu_dict()
+# print(doudizhu.TOTAL)
+# # 34152种出牌型
+# print(len(doudizhu.DATA))
+# # print(doudizhu.DATA)
+# # 'Q-Q-Q-Q': [('bomb', 9)] 每种牌以及权重
+# # 牌型分类
+# print(doudizhu.TYPE_CARDS)
+# 'bomb': {0: ['3-3-3-3'], 1: ['4-4-4-4'], 2: ['5-5-5-5'], 3: ['6-6-6-6'], 4: ['7-7-7-7'], 5: ['8-8-8-8'], 6: ['9-9-9-9'], 7: ['10-10-10-10'], 8: ['J-J-J-J'], 9: ['Q-Q-Q-Q'], 10: ['K-K-K-K'], 11: ['A-A-A-A'], 12: ['2-2-2-2']}, 'rocket': {0: ['BJ-CJ']}
+# 牌的种类统计，以及对应的牌型和权重

@@ -33,6 +33,8 @@ usage:
 """
 
 import random
+from typing import List
+
 from .engine import Doudizhu
 from .card import Card
 
@@ -62,7 +64,7 @@ def new_game():
     return result
 
 
-def check_card_type(cards):
+def check_card_type(cards: int):
     """判断手牌是否符合斗地主规则
     cards: Card类型的列表
     return: bool, type
@@ -81,8 +83,8 @@ def cards_greater(cards_x, cards_y):
     return Doudizhu.cards_greater(cards_x_no_suit, cards_y_no_suit)
 
 
-def list_greater_cards(cards_target, cards_candidate):
-    """ 对于目标牌组合cards_target
+def list_greater_cards(cards_target: List[int], cards_candidate: List[int]) -> dict:
+    """ 对于目标牌组合cards_target,返回int
     从候选牌cards_candidate中找出所有可以压制它的牌型
     不区分花色，返回结果是一个字典{card_type:[greater_cards,],}
     """

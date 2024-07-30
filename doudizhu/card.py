@@ -50,6 +50,7 @@ class Card(object):
     PRETTY_REDS = [2, 4]
 
     @staticmethod
+    # 从4a字符串转为int对象
     def new(string):
         if Card.is_joker(string):
             return Card.CHAR_RANK_TO_INT_RANK[string]
@@ -79,11 +80,14 @@ class Card(object):
 
     @staticmethod
     def rank_int_to_str(card_int):
+        # print(card_int, type(card_int))
         rank_int = Card.get_rank_int(card_int)
         return Card.STR_RANKS[rank_int]
 
     @staticmethod
     def cards_without_suit(card_ints):
+        # print(card_ints, type(card_ints))
+        # [128, 64] <class 'list'>
         no_suit_cards = [Card.rank_int_to_str(ci) for ci in card_ints]
         return '-'.join(no_suit_cards)
 
@@ -96,6 +100,7 @@ class Card(object):
         return sorted(card_ints, cmp=cmp_card, reverse=True)
 
     @staticmethod
+    # 字符转为带花色的2/4张牌，4-4s4h4d4c
     def card_rank_to_real_card(card):
         """give a string card rank, return four cards with suit"""
         if Card.is_joker(card):
@@ -104,7 +109,7 @@ class Card(object):
 
     @staticmethod
     def get_rank_int(card_int):
-        return (card_int) & 0xF
+        return int(card_int) & 0xF
 
     @staticmethod
     def get_suit_int(card_int):
