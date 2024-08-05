@@ -34,6 +34,7 @@ class LandlordGame :
         self.current_cards = []
         self.current_cards_user = None
         for i in range(3) :
+            self.players[i]["cards"] = []
             self.players[i]["cards"].extend(reversed(cards_groups[i]))
             print("玩家", i, "初始牌", Card.cards_without_suit(self.players[i]["cards"]))
         self.landlord_cards = cards_groups[3]
@@ -307,7 +308,7 @@ class LandlordGame :
                 amount = 1
                 for i in range(start_index+1, min(int(length/ 2),12)):
                     # 分析多少个连2，不含2,并且考虑剩的牌不应该有很多三
-                    add ={2:1,3:1,4:2,5:2,6:3}
+                    add ={2:1,3:1,4:2,5:2,6:3,7:4,8:4,9:2,10:2,11:2,12:0}
                     if 1 < counts[i] < 4 and sum(counts[start_index:amount+1]) <= 2*amount+add[amount+1]:
                         amount += 1
                     else:
@@ -454,16 +455,15 @@ class LandlordGame :
 
 
 # 生成数据
-num_games = 1
+num_games = 200000
 game_records = []
 game = LandlordGame()
 for i in range(num_games) :
     game_record = game.simulate_game()
     game_records.append(game_record)
-    i += 1
 
 # 打印前3局的对局记录作为示例
-for i, record in enumerate(game_records[:num_games]) :
+for i, record in enumerate(game_records[:1]) :
     print("==========================================================================")
     print(f"Game {i + 1}:")
     print(f"  Initial Hands: {record['initial_hands']}")
